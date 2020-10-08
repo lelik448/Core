@@ -16,6 +16,8 @@ namespace Core_1
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+            //services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,14 +27,34 @@ namespace Core_1
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
+
+            //app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+            // app.UseCookiePolicy();
 
             app.UseRouting();
+            // app.UseRequestLocalization();
+            // app.UseCors();
+
+            //app.UseAuthentication();
+            //app.UseAuthorization();
+            // app.UseSession();
+            // app.UseResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    await context.Response.WriteAsync("hello");
                 });
             });
         }
