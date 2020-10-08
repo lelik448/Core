@@ -10,8 +10,8 @@ namespace Core_1.Controllers
     {
         public IActionResult Index()
         {
-            //return View();
-            return Content("Hello from home controller");
+            return View();
+            //return Content("Hello from home controller");
         }
     }
 }
