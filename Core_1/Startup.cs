@@ -52,10 +52,10 @@ namespace Core_1
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("hello default");
-                });
+//                endpoints.MapGet("/", async context =>
+//               {
+//                    await context.Response.WriteAsync("hello default");
+ //               });
             });
         }
     }

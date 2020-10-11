@@ -8,28 +8,28 @@ using Core_1.ViewModels;
 
 namespace Core_1.Controllers
 {
-    public class HomeController : Controller
+    public class ClientController : Controller
     {
 
-        private readonly List<EmployeeViewModel> _employees = new List<EmployeeViewModel>
+        private readonly List<ClientViewModel> _clients = new List<ClientViewModel>
         {
-            new EmployeeViewModel
+            new ClientViewModel
             {
                 Id = 1,
                 FirstName = "Иван",
                 SurName = "Иванов",
-                Patronymic = "Иванович",
-                Age = 22,
-                Position = "Начальник"
+                City = "Москва",
+                RegistrationDate = new DateTime (2020,10,08),
+                Status = "Начальник"
             },
-            new EmployeeViewModel
+            new ClientViewModel
             {
                 Id = 2,
                 FirstName = "Владислав",
                 SurName = "Петров",
-                Patronymic = "Иванович",
-                Age = 35,
-                Position = "Программист"
+                City = "Санкт-Петербург",
+                RegistrationDate = new DateTime (2020,10,07),
+                Status = "Начальник"
             }
         };
 
@@ -40,20 +40,20 @@ namespace Core_1.Controllers
             //return Content("Hello from home controller");
         }
 
-        public IActionResult EmployeeList()
+        public IActionResult ClientList()
         {
-            return View(_employees);
+            return View(_clients);
         }
-        public IActionResult Employee(int id)
+        public IActionResult Client(int id)
         {
 
-            var employeeViewModel = _employees.FirstOrDefault(x => x.Id == id);
+            var clientViewModel = _clients.FirstOrDefault(x => x.Id == id);
 
             //Если такого не существует
-            if (employeeViewModel == null)
+            if (clientViewModel == null)
                 return NotFound(); // возвращаем результат 404 Not Found
 
-            return View(employeeViewModel);
+            return View(clientViewModel);
             //   return View();
             //return Content("Hello from home controller");
         }

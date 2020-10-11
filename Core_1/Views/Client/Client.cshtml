@@ -1,6 +1,6 @@
-﻿@model Core_1.ViewModels.EmployeeViewModel
+﻿@model Core_1.ViewModels.ClientViewModel
 
-@Html.ActionLink("Назад к списку", "EmployeeList", "Home")
+@Html.ActionLink("Назад к списку", "ClientList", "Client")
 
 <table class="table table-bordered">
     <tr>
@@ -16,15 +16,15 @@
         <td>@Model.FirstName</td>
     </tr>
     <tr>
-        <td>Отчество</td>
-        <td>@Model.Patronymic</td>
+        <td>Город</td>
+        <td>@Model.City</td>
     </tr>
     <tr>
-        <td>Возраст</td>
-        <td>@Model.Age</td>
+        <td>Статус</td>
+        <td>@Model.Status</td>
     </tr>
     <tr>
-        <td>Должность</td>
-        <td>@Model.Position</td>
+        <td>Дата регистрации</td>
+        <td>@Model.RegistrationDate</td>
     </tr>
 </table>

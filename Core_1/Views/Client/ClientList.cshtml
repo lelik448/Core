@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Core_1.ViewModels.EmployeeViewModel>
+﻿@model IEnumerable<Core_1.ViewModels.ClientViewModel>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,9 +12,8 @@
             <tr>
                 <td>@item.FirstName</td>
                 <td>@item.SurName</td>
-                <td>@item.Patronymic</td>
-                <td>@item.Age</td>
-                <td>@Html.ActionLink("Детали", "Employee", new { id = item.Id })</td>
+                <td>@item.Status</td>
+                <td>@Html.ActionLink("Детали", "Client", new { id = item.Id })</td>
             </tr>
         }
     </table>
