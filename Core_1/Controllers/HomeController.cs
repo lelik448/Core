@@ -20,7 +20,7 @@ namespace Core_1.Controllers
         {
             return View();
         }
-        public IActionResult Blog_single()
+        public IActionResult BlogSingle()
         {
             return View();
         }
@@ -29,7 +29,7 @@ namespace Core_1.Controllers
         {
             return View();
         }
-        public IActionResult Product_details()
+        public IActionResult ProductDetails()
         {
             return View();
         }
@@ -42,11 +42,11 @@ namespace Core_1.Controllers
         {
             return View();
         }
-        public IActionResult Contact_us()
+        public IActionResult ContactUs()
         {
             return View();
         }
-        public IActionResult _404 ()
+        public IActionResult _NotFound()
         {
             return View();
         }
