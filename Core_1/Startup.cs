@@ -26,13 +26,14 @@ namespace Core_1
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseStaticFiles();
+              
             }
             else
             {
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+            app.UseStaticFiles();
 
             //app.UseHttpsRedirection();
             //app.UseStaticFiles();
