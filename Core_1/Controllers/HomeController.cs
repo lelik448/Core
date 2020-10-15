@@ -3,59 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Core_1.ViewModels;
-
 
 namespace Core_1.Controllers
 {
     public class HomeController : Controller
     {
-
-        private readonly List<EmployeeViewModel> _employees = new List<EmployeeViewModel>
-        {
-            new EmployeeViewModel
-            {
-                Id = 1,
-                FirstName = "Иван",
-                SurName = "Иванов",
-                Patronymic = "Иванович",
-                Age = 22,
-                Position = "Начальник"
-            },
-            new EmployeeViewModel
-            {
-                Id = 2,
-                FirstName = "Владислав",
-                SurName = "Петров",
-                Patronymic = "Иванович",
-                Age = 35,
-                Position = "Программист"
-            }
-        };
-
-
         public IActionResult Index()
         {
             return View();
-            //return Content("Hello from home controller");
         }
-
-        public IActionResult EmployeeList()
+        public IActionResult Blog()
         {
-            return View(_employees);
+            return View();
         }
-        public IActionResult Employee(int id)
+        public IActionResult Shop()
         {
-
-            var employeeViewModel = _employees.FirstOrDefault(x => x.Id == id);
-
-            //Если такого не существует
-            if (employeeViewModel == null)
-                return NotFound(); // возвращаем результат 404 Not Found
-
-            return View(employeeViewModel);
-            //   return View();
-            //return Content("Hello from home controller");
+            return View();
         }
+        public IActionResult BlogSingle()
+        {
+            return View();
+        }
+
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+        public IActionResult ProductDetails()
+        {
+            return View();
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+        public IActionResult Cart()
+        {
+            return View();
+        }
+        public IActionResult ContactUs()
+        {
+            return View();
+        }
+        public IActionResult _NotFound()
+        {
+            return View();
+        }
+
+
     }
 }

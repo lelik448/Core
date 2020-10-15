@@ -1,17 +1,32 @@
-﻿@{
-    Layout = null;
+﻿
+@await Html.PartialAsync("Partial/_Slider")
+
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                @await Html.PartialAsync("Partial/_LeftSidebar")
+            </div>
+
+            <div class="col-sm-9 padding-right">
+
+                @await Html.PartialAsync("Partial/_FeaturedItems")
+                @await Html.PartialAsync("Partial/_CategoryTab")
+                @await Html.PartialAsync("Partial/_RecomendedItems")
+
+
+            </div>
+        </div>
+    </div>
+</section>
+@**@
+
+@section Scripts {
+    <script type="text/javascript" src="~/lib/somescript.js"></script>
 }
 
-<!DOCTYPE html>
+@section Styles {
+    <link href="~/css/new_style.css" rel="stylesheet">
+}
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    @Html.ActionLink("Сотрудники", "EmployeeList", "Home")
-    @Html.ActionLink("Клиенты", "ClientList", "Client")
-    
-</body>
-</html>
