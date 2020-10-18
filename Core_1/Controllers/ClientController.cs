@@ -4,50 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Core_1.ViewModels;
-
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Core_1.Infrastructure.Interfaces;
 
 namespace Core_1.Controllers
 {
     public class ClientController : Controller
     {
+        private readonly IClientService _clients;
 
-        private readonly List<ClientViewModel> _clients = new List<ClientViewModel>
+        public ClientController(IClientService clients)
         {
-            new ClientViewModel
-            {
-                Id = 1,
-                FirstName = "Иван",
-                SurName = "Иванов",
-                City = "Москва",
-                RegistrationDate = new DateTime (2020,10,08),
-                Status = "Начальник"
-            },
-            new ClientViewModel
-            {
-                Id = 2,
-                FirstName = "Владислав",
-                SurName = "Петров",
-                City = "Санкт-Петербург",
-                RegistrationDate = new DateTime (2020,10,07),
-                Status = "Начальник"
-            }
-        };
-
-
-        public IActionResult Index()
-        {
-            return View();
-            //return Content("Hello from home controller");
+            _clients = clients;
         }
+
 
         public IActionResult ClientList()
         {
-            return View(_clients);
+            return View(_clients.GetAll());
         }
+        [Route("{id}")]
         public IActionResult Client(int id)
         {
 
-            var clientViewModel = _clients.FirstOrDefault(x => x.Id == id);
+            var clientViewModel = _clients.GetById(id);
 
             //Если такого не существует
             if (clientViewModel == null)
@@ -56,6 +36,62 @@ namespace Core_1.Controllers
             return View(clientViewModel);
             //   return View();
             //return Content("Hello from home controller");
+        }
+
+        [HttpGet]
+        [Route("edit/{id?}")]
+        public IActionResult Edit(int? id)
+        {
+
+            if (!id.HasValue)
+                return View(new ClientViewModel());
+
+            var model = _clients.GetById(id.Value);
+            if (model == null)
+                return NotFound();
+
+            return View(model);
+
+        }
+        [HttpPost]
+        [Route("edit/{id?}")]
+        public IActionResult Edit(ClientViewModel model)
+        {
+            if (model.Id > 0)
+            {
+                var dbItem = _clients.GetById(model.Id);
+
+                if (ReferenceEquals(dbItem, null))
+                    return NotFound();// возвращаем результат 404 Not Found
+
+                dbItem.FirstName = model.FirstName;
+                dbItem.SurName = model.SurName;
+                dbItem.RegistrationDate = model.RegistrationDate;
+                dbItem.Status = model.Status;
+                dbItem.City = model.City;
+            }
+            else
+            {
+                _clients.AddNew(model);
+            }
+            _clients.Commit();
+
+            return RedirectToAction(nameof(ClientList));
+        }
+
+
+        [HttpGet]
+        [Route("delete/{id?}")]
+        public IActionResult Delete(int? id)
+        {
+
+            if (!id.HasValue)
+                return NotFound();
+
+            _clients.Delete(id.Value);
+
+            return RedirectToAction(nameof(ClientList));
+
         }
     }
 }

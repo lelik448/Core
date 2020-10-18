@@ -4,50 +4,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Core_1.ViewModels;
-
+using Core_1.Infrastructure.Interfaces;
 
 namespace Core_1.Controllers
 {
+    [Route("users")]
     public class EmployeeController : Controller
     {
+        private readonly IEmployeeService _employeeService;
 
-        private readonly List<EmployeeViewModel> _employees = new List<EmployeeViewModel>
+        public EmployeeController(IEmployeeService employeeService)
         {
-            new EmployeeViewModel
-            {
-                Id = 1,
-                FirstName = "Иван",
-                SurName = "Иванов",
-                Patronymic = "Иванович",
-                Age = 22,
-                Position = "Начальник"
-            },
-            new EmployeeViewModel
-            {
-                Id = 2,
-                FirstName = "Владислав",
-                SurName = "Петров",
-                Patronymic = "Иванович",
-                Age = 35,
-                Position = "Программист"
-            }
-        };
+            _employeeService = employeeService;
+        }
 
-
+        [Route("idx")]
         public IActionResult Index()
         {
             return View();
             //return Content("Hello from home controller");
         }
-
+        [Route("list")]
         public IActionResult EmployeeList()
         {
-            return View(_employees);
+            return View(_employeeService.GetAll());
         }
+        [Route("{id}")]
         public IActionResult Employee(int id)
         {
 
-            var employeeViewModel = _employees.FirstOrDefault(x => x.Id == id);
+            var employeeViewModel = _employeeService.GetById(id);
 
             //Если такого не существует
             if (employeeViewModel == null)
@@ -57,5 +43,65 @@ namespace Core_1.Controllers
             //   return View();
             //return Content("Hello from home controller");
         }
+
+        [HttpGet]
+        [Route ("edit/{id?}")]
+        public IActionResult Edit(int? id)
+        {
+
+            if (!id.HasValue)
+                return View(new EmployeeViewModel());
+
+            var model = _employeeService.GetById(id.Value);
+            if (model == null)
+                return NotFound();
+
+            return View(model);
+
+        }
+        [HttpPost]
+        [Route("edit/{id?}")]
+        public IActionResult Edit(EmployeeViewModel model)
+        {
+            if (model.Id > 0)
+            {
+                var dbItem = _employeeService.GetById(model.Id);
+
+                if (ReferenceEquals(dbItem, null))
+                    return NotFound();// возвращаем результат 404 Not Found
+
+                dbItem.FirstName = model.FirstName;
+                dbItem.SurName = model.SurName;
+                dbItem.Age = model.Age;
+                dbItem.Patronymic = model.Patronymic;
+                dbItem.Position = model.Position;
+            }
+            else
+            {
+                _employeeService.AddNew(model);
+            }
+            _employeeService.Commit();
+
+            return RedirectToAction(nameof(EmployeeList));
+        }
+
+
+        [HttpGet]
+        [Route("delete/{id?}")]
+        public IActionResult Delete(int? id)
+        {
+
+            if (!id.HasValue)
+                return NotFound();
+
+            _employeeService.Delete(id.Value);
+
+            return RedirectToAction(nameof(EmployeeList));
+
+        }
+
+
     }
+
+
 }

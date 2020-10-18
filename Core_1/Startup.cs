@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core_1.Infrastructure;
+using Core_1.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +20,8 @@ namespace Core_1
         {
             services.AddMvc();
             //services.AddRazorPages();
+            services.AddSingleton<IEmployeeService, InMemoryEmployeesServise>();
+            services.AddSingleton<IClientService, InMemoryClientServise>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
