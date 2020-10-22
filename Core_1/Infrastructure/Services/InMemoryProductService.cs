@@ -19,7 +19,7 @@ namespace Core.Infrastructure.Services
                 new Category()
                 {
                     Id = 1,
-                    Name = "Sportswear",
+                    Name = "Sportswear2",
                     Order = 0,
                     ParentId = null
                 },
