@@ -271,6 +271,12 @@ namespace Core.Infrastructure.Services
                     Name = "Rösch creative culture",
                     Order = 6
                 },
+                new Brand()
+                {
+                    Id = 7,
+                    Name = "My Brand",
+                    Order = 6
+                },
             };
         }
 
