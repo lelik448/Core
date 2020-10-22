@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Core.ViewComponents
 {
-    public class BrandsViewComonent:ViewComponent
+    public class BrandsViewComponent:ViewComponent
     {
         private readonly IProductService _productService;
 
-        public BrandsViewComonent(IProductService productService)
+        public BrandsViewComponent(IProductService productService)
         {
             this._productService = productService;
         }
