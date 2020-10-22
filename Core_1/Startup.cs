@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Infrastructure.Interfaces;
+using Core.Infrastructure.Services;
 using Core_1.Infrastructure;
 using Core_1.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -22,6 +24,7 @@ namespace Core_1
             //services.AddRazorPages();
             services.AddSingleton<IEmployeeService, InMemoryEmployeesServise>();
             services.AddSingleton<IClientService, InMemoryClientServise>();
+            services.AddSingleton<IProductService, InMemoryProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -63,26 +63,36 @@ namespace Core_1.Controllers
         [Route("edit/{id?}")]
         public IActionResult Edit(EmployeeViewModel model)
         {
-            if (model.Id > 0)
+            if (model.Age < 18 || model.Age > 75)
             {
-                var dbItem = _employeeService.GetById(model.Id);
-
-                if (ReferenceEquals(dbItem, null))
-                    return NotFound();// возвращаем результат 404 Not Found
-
-                dbItem.FirstName = model.FirstName;
-                dbItem.SurName = model.SurName;
-                dbItem.Age = model.Age;
-                dbItem.Patronymic = model.Patronymic;
-                dbItem.Position = model.Position;
+                ModelState.AddModelError("Age", "Ошибка возраста!");
             }
-            else
+
+            if (!ModelState.IsValid)
             {
-                _employeeService.AddNew(model);
+                return View(model);
             }
-            _employeeService.Commit();
 
-            return RedirectToAction(nameof(EmployeeList));
+                if (model.Id > 0)
+                {
+                    var dbItem = _employeeService.GetById(model.Id);
+
+                    if (ReferenceEquals(dbItem, null))
+                        return NotFound();// возвращаем результат 404 Not Found
+
+                    dbItem.FirstName = model.FirstName;
+                    dbItem.SurName = model.SurName;
+                    dbItem.Age = model.Age;
+                    dbItem.Patronymic = model.Patronymic;
+                    dbItem.Position = model.Position;
+                }
+                else
+                {
+                    _employeeService.AddNew(model);
+                }
+                _employeeService.Commit();
+
+                return RedirectToAction(nameof(EmployeeList));
         }
 
 

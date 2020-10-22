@@ -16,10 +16,7 @@ namespace Core_1.Controllers
         {
             return View();
         }
-        public IActionResult Shop()
-        {
-            return View();
-        }
+      
         public IActionResult BlogSingle()
         {
             return View();
@@ -29,10 +26,7 @@ namespace Core_1.Controllers
         {
             return View();
         }
-        public IActionResult ProductDetails()
-        {
-            return View();
-        }
+    
 
         public IActionResult Login()
         {
