@@ -13,7 +13,7 @@ using System.ComponentModel.DataAnnotations.Schema;
         public string ImageUrl { get; set; }
         public decimal Price { get; set; }
 
-        public DateTime ProductionDate { get; set; }
+        public DateTime ProductionDate { get; set; } // ДЗ?
 
         public string Manufacturer { get; set; }
 
