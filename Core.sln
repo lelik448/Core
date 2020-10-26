@@ -4,8 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core_1\Core.csproj", "{9C4883D4-008F-445D-93B2-FF9519D42D53}"
+	ProjectSection(ProjectDependencies) = postProject
+		{91B85D51-8B09-4F41-A917-18F559B32F3A} = {91B85D51-8B09-4F41-A917-18F559B32F3A}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Domain", "Core.Domain\Core.Domain.csproj", "{9A7C0C82-4F4E-427D-AEAF-5BB8DD30444D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Domain", "Core.Domain\Core.Domain.csproj", "{9A7C0C82-4F4E-427D-AEAF-5BB8DD30444D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.DAL", "Core.DAL\Core.DAL.csproj", "{91B85D51-8B09-4F41-A917-18F559B32F3A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9A7C0C82-4F4E-427D-AEAF-5BB8DD30444D} = {9A7C0C82-4F4E-427D-AEAF-5BB8DD30444D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,10 @@ Global
 		{9A7C0C82-4F4E-427D-AEAF-5BB8DD30444D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A7C0C82-4F4E-427D-AEAF-5BB8DD30444D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A7C0C82-4F4E-427D-AEAF-5BB8DD30444D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91B85D51-8B09-4F41-A917-18F559B32F3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91B85D51-8B09-4F41-A917-18F559B32F3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91B85D51-8B09-4F41-A917-18F559B32F3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91B85D51-8B09-4F41-A917-18F559B32F3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

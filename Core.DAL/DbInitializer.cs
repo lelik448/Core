@@ -1,26 +1,31 @@
-﻿using Core.Domain.Entities;
-using Core.Infrastructure.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Core.Infrastructure.Services
+namespace Core.DAL
 {
-    public class InMemoryProductService: IProductService
-    {
-        private readonly List<Category> _categories;
-        private readonly List<Brand> _brands;
-        private readonly List<Product> _products;
+   
 
-        public InMemoryProductService()
+
+        public static class DbInitializer
         {
-            _categories = new List<Category>()
+            public static void Initialize(CoreContext context)
+            {
+                context.Database.EnsureCreated();
+
+                if (context.Products.Any())
+                {
+                    return;   // DB had already been seeded
+                }
+
+                var categories = new List<Category>()
             {
                 new Category()
                 {
                     Id = 1,
-                    Name = "Sportswear2",
+                    Name = "Sportswear 2",
                     Order = 0,
                     ParentId = null
                 },
@@ -228,7 +233,20 @@ namespace Core.Infrastructure.Services
                     ParentId = null
                 }
             };
-            _brands = new List<Brand>()
+                using (var trans = context.Database.BeginTransaction())
+                {
+                    foreach (var section in categories)
+                    {
+                        context.Categories.Add(section);
+                    }
+
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Categories] ON");
+                    context.SaveChanges();
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Categories] OFF");
+                    trans.Commit();
+                }
+
+                var brands = new List<Brand>()
             {
                 new Brand()
                 {
@@ -272,14 +290,21 @@ namespace Core.Infrastructure.Services
                     Name = "Rösch creative culture",
                     Order = 6
                 },
-                new Brand()
-                {
-                    Id = 7,
-                    Name = "My Brand",
-                    Order = 6
-                },
             };
-            _products = new List<Product>()
+                using (var trans = context.Database.BeginTransaction())
+                {
+                    foreach (var brand in brands)
+                    {
+                        context.Brands.Add(brand);
+                    }
+
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Brands] ON");
+                    context.SaveChanges();
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Brands] OFF");
+                    trans.Commit();
+                }
+
+                var products = new List<Product>()
             {
                 new Product()
                 {
@@ -402,32 +427,22 @@ namespace Core.Infrastructure.Services
                     BrandId = 3
                 },
             };
+                using (var trans = context.Database.BeginTransaction())
+                {
+                    foreach (var product in products)
+                    {
+                        context.Products.Add(product);
+                    }
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] ON");
+                    context.SaveChanges();
+                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] OFF");
+                    trans.Commit();
+                }
+
+
+
+            }
         }
-
-        public IEnumerable<Brand> GetBrands()
-        {
-            return _brands;
-        }
-
-        public IEnumerable<Category> GetCategories()
-        {
-            return _categories;
-        }
-        public IEnumerable<Product> GetProducts(ProductFilter filter)
-        {
-            var products = _products;
-
-            if (filter.CategoryId.HasValue)
-                products = products
-                    .Where(p => p.CategoryId.Equals(filter.CategoryId))
-                    .ToList();
-            if (filter.BrandId.HasValue)
-                products = products
-                    .Where(p => p.BrandId.HasValue && p.BrandId.Value == filter.BrandId.Value)
-                    .ToList();
-
-            return products;
-        }
-
     }
-}
+
+
