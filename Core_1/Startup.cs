@@ -1,19 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Core.DAL;
+using Core.Domain.Entities;
 using Core.Infrastructure.Interfaces;
 using Core.Infrastructure.Services;
 using Core_1.Infrastructure;
 using Core_1.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Core_1
 {
@@ -37,6 +35,40 @@ namespace Core_1
             services.AddScoped<IProductService, SqlProductService>();
 
             services.AddDbContext<CoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<CoreContext>().AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options => // íåîáÿçàòåëüíî
+            {
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+àáâãäå¸æçèêëìíîïðñòóôõö÷øùüúýþÿÀÁÂÃÄÅ¨ÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß";
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+
+            services.ConfigureApplicationCookie(options => // íåîáÿçàòåëüíî
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                //options.Cookie.Expiration = TimeSpan.FromDays(150);
+                options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
+                options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                options.SlidingExpiration = true;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,7 +94,7 @@ namespace Core_1
             // app.UseRequestLocalization();
             // app.UseCors();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
             //app.UseAuthorization();
             // app.UseSession();
             // app.UseResponseCaching();

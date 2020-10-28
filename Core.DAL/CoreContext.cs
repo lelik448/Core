@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Core.DAL
 {
-    public class CoreContext : DbContext
+    public class CoreContext : IdentityDbContext<User>
     {
         public CoreContext(DbContextOptions options) : base(options)
         {
