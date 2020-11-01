@@ -1,27 +1,30 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Core.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text;
+using System.Threading;
 
 namespace Core.DAL
 {
-   
 
 
-        public static class DbInitializer
+
+    public static class DbInitializer
+    {
+        public static void Initialize(CoreContext context)
         {
-            public static void Initialize(CoreContext context)
+            context.Database.EnsureCreated();
+
+            if (context.Products.Any())
             {
-                context.Database.EnsureCreated();
+                return;   // DB had already been seeded
+            }
 
-                if (context.Products.Any())
-                {
-                    return;   // DB had already been seeded
-                }
-
-                var categories = new List<Category>()
+            var categories = new List<Category>()
             {
                 new Category()
                 {
@@ -234,20 +237,20 @@ namespace Core.DAL
                     ParentId = null
                 }
             };
-                using (var trans = context.Database.BeginTransaction())
+            using (var trans = context.Database.BeginTransaction())
+            {
+                foreach (var section in categories)
                 {
-                    foreach (var section in categories)
-                    {
-                        context.Categories.Add(section);
-                    }
-
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Categories] ON");
-                    context.SaveChanges();
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Categories] OFF");
-                    trans.Commit();
+                    context.Categories.Add(section);
                 }
 
-                var brands = new List<Brand>()
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Categories] ON");
+                context.SaveChanges();
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Categories] OFF");
+                trans.Commit();
+            }
+
+            var brands = new List<Brand>()
             {
                 new Brand()
                 {
@@ -292,20 +295,20 @@ namespace Core.DAL
                     Order = 6
                 },
             };
-                using (var trans = context.Database.BeginTransaction())
+            using (var trans = context.Database.BeginTransaction())
+            {
+                foreach (var brand in brands)
                 {
-                    foreach (var brand in brands)
-                    {
-                        context.Brands.Add(brand);
-                    }
-
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Brands] ON");
-                    context.SaveChanges();
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Brands] OFF");
-                    trans.Commit();
+                    context.Brands.Add(brand);
                 }
 
-                var products = new List<Product>()
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Brands] ON");
+                context.SaveChanges();
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Brands] OFF");
+                trans.Commit();
+            }
+
+            var products = new List<Product>()
             {
                 new Product()
                 {
@@ -428,22 +431,58 @@ namespace Core.DAL
                     BrandId = 3
                 },
             };
-                using (var trans = context.Database.BeginTransaction())
+            using (var trans = context.Database.BeginTransaction())
+            {
+                foreach (var product in products)
                 {
-                    foreach (var product in products)
-                    {
-                        context.Products.Add(product);
-                    }
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] ON");
-                    context.SaveChanges();
-                    context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] OFF");
-                    trans.Commit();
+                    context.Products.Add(product);
                 }
-
-            
-
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] ON");
+                context.SaveChanges();
+                context.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] OFF");
+                trans.Commit();
             }
+
+
+
+        }
+        public static void InitializeUsers(IServiceProvider services)
+        {
+            
+            var roleManager = services.GetService<RoleManager<IdentityRole>>();
+            EnsureRole(roleManager, "Users");
+            EnsureRole(roleManager, "Admins");
+
+            EnsureRoleToUser(services, "Admin", "Admins", "admin@123");
+        }
+
+        private static void EnsureRoleToUser(IServiceProvider services, string userName, string roleName, string password)
+        {
+            var userManager = services.GetService<UserManager<User>>();
+            var userStore = services.GetService<IUserStore<User>>();
+
+            if (userStore.FindByNameAsync(userName, CancellationToken.None).Result != null)
+            {
+                return;
+            }
+
+            var admin = new User
+            {
+                UserName = userName,
+                Email = $"{userName}@domain.com"
+            };
+
+            if (userManager.CreateAsync(admin, password).Result.Succeeded)
+                userManager.AddToRoleAsync(admin, roleName).Wait();
+        }
+
+        private static void EnsureRole(RoleManager<IdentityRole> roleManager, string roleName)
+        {
+            if (!roleManager.RoleExistsAsync(roleName).Result)
+                roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
         }
     }
+}
+    
 
 

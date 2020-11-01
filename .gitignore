@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Core_1/wwwroot/css/site.min.css
+/Core_1/wwwroot/js/site.min.js
+/Core_1/wwwroot/js/site.min.js.map

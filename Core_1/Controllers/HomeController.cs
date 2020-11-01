@@ -32,10 +32,7 @@ namespace Core_1.Controllers
         {
             return View();
         }
-        public IActionResult Cart()
-        {
-            return View();
-        }
+       
         public IActionResult ContactUs()
         {
             return View();

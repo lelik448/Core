@@ -24,6 +24,7 @@ namespace Core_1
                 {
                     CoreContext context = services.GetRequiredService<CoreContext>();
                     DbInitializer.Initialize(context);
+                    DbInitializer.InitializeUsers(services);
                 }
                 catch (Exception ex)
                 {
