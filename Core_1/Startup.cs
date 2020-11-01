@@ -6,6 +6,7 @@ using Core_1.Infrastructure;
 using Core_1.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +37,9 @@ namespace Core_1
 
             services.AddDbContext<CoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<CoreContext>().AddDefaultTokenProviders();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ICartService, CookieCartService>();
 
             services.Configure<IdentityOptions>(options => // необязательно
             {
@@ -95,6 +99,7 @@ namespace Core_1
             // app.UseCors();
 
             app.UseAuthentication();
+            app.UseAuthorization();
             //app.UseAuthorization();
             // app.UseSession();
             // app.UseResponseCaching();

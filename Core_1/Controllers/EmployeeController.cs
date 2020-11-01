@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Core_1.ViewModels;
 using Core_1.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Core_1.Controllers
 {
     [Route("users")]
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
@@ -19,17 +21,20 @@ namespace Core_1.Controllers
         }
 
         [Route("idx")]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
             //return Content("Hello from home controller");
         }
         [Route("list")]
+        [AllowAnonymous]
         public IActionResult EmployeeList()
         {
             return View(_employeeService.GetAll());
         }
         [Route("{id}")]
+        [Authorize(Roles = "Admins")]
         public IActionResult Employee(int id)
         {
 
@@ -45,6 +50,7 @@ namespace Core_1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admins")]
         [Route ("edit/{id?}")]
         public IActionResult Edit(int? id)
         {
@@ -60,6 +66,7 @@ namespace Core_1.Controllers
 
         }
         [HttpPost]
+        [Authorize(Roles = "Admins")]
         [Route("edit/{id?}")]
         public IActionResult Edit(EmployeeViewModel model)
         {
@@ -97,6 +104,7 @@ namespace Core_1.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Admins")]
         [Route("delete/{id?}")]
         public IActionResult Delete(int? id)
         {
