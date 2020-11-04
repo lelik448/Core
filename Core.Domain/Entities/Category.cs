@@ -1,4 +1,5 @@
-﻿using Core.Domain.Entities.Base;
+﻿using Core.Domain.Entities;
+using Core.Domain.Entities.Base;
 using Core.Domain.Entities.Base.Interfaces;
 using System.Collections;
 using System.Collections.Generic;

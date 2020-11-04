@@ -41,6 +41,8 @@ namespace Core_1
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<ICartService, CookieCartService>();
 
+            services.AddScoped<IOrdersService, SqlOrdersService>();
+
             services.Configure<IdentityOptions>(options => // необязательно
             {
                 // Password settings
@@ -107,6 +109,12 @@ namespace Core_1
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+
+                endpoints.MapControllerRoute(
+                   name: "areas",
+                   pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
