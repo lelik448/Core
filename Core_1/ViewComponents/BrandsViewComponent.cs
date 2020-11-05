@@ -30,7 +30,7 @@ namespace Core.ViewComponents
                 BrandsCount = 0
             }).OrderBy(b => b.Order).ToList();
         }
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             var Brands = GetBrands();
             return View(Brands);

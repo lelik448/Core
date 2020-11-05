@@ -53,7 +53,7 @@ namespace Core.ViewComponents
             parentCategories = parentCategories.OrderBy(c => c.Order).ToList();
             return parentCategories;
         }
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             var Categories = GetCategories();
             return View(Categories);
